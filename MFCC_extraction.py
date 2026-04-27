@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import soundfile as sf # Alternative to librosa.load for direct access to audio data
 
 audio_file_path = 'speech_commands_v0.02/yes/0a7c2a8d_nohash_0.wav'
-audio_data, sample_rate = sf . read(audio_file_path)
+audio_data, sample_rate = sf.read(audio_file_path)
 
 def extract_mfccs(audio_path, sr=16000, n_mfcc=256, n_fft=4096, hop_length=512):
     """Extracts MFCCs from an audio file.
