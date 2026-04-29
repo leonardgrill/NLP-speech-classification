@@ -38,7 +38,7 @@ def prepare_dataset_scikit_learn(data_directory , sr=16000, n_mfcc=13):
     loop or reduce the list of allowed words.
     """
     
-    allowed_words = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
+    allowed_words = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go'] # change this list to include only a subset of commands for binary classification
 
     # You can also add _background_noise_ and _unknown_
     print (f"processing dataset in {data_directory} ...")
@@ -131,9 +131,8 @@ if __name__ == "__main__":
     svm_model = SVC(kernel='rbf', C=10) # Experiment with Kernel and C
     svm_model.fit(X_train_sk, y_train_sk)
 
+    # Save the model and label encoder for later use
     joblib.dump(svm_model, 'models/svm_model_10-labels.joblib')
-
-    # Save the label encoder
     joblib.dump(label_encoder_sk, 'models/label_encoder_10-labels.joblib')
 
     # Evaluation
