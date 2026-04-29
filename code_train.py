@@ -1,4 +1,5 @@
 from operator import le
+from sklearn.metrics import accuracy_score, classification_report
 from MFCC_extraction import extract_mfccs
 import numpy as np
 import os
@@ -8,6 +9,9 @@ import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import soundfile as sf
+from sklearn .svm import SVC
+import joblib
+
 # Main directory of the dataset (adjust)
 data_dir = 'speech_commands_v0.02'
 
@@ -122,3 +126,18 @@ if __name__ == "__main__":
     print ( f"Validation data Shape ( scikit - learn ) : {X_val_sk. shape} , Labels : {y_val_sk. shape}")
     print ( f"Test Data Shape ( scikit - learn ) : {X_test_sk. shape} , Labels : {y_test_sk . shape}")
     print ( f"Classes : {label_encoder_sk . classes_}")
+
+    print("\nTraining an SVC model (scikit-learn)... ")
+    svm_model = SVC(kernel='rbf', C=10) # Experiment with Kernel and C
+    svm_model.fit(X_train_sk, y_train_sk)
+
+    joblib.dump(svm_model, 'models/svm_model_10-labels.joblib')
+
+    # Save the label encoder
+    joblib.dump(label_encoder_sk, 'models/label_encoder_10-labels.joblib')
+
+    # Evaluation
+    y_pred_svm = svm_model.predict(X_test_sk)
+    print("SVC Classification Report: ")
+    print(classification_report(y_test_sk, y_pred_svm, target_names=label_encoder_sk. classes_))
+    print(f"SVC Accuracy on Test Data: {accuracy_score(y_test_sk, y_pred_svm):.4f}")
