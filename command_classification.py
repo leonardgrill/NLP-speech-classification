@@ -9,22 +9,37 @@ import librosa.display
 import matplotlib.pyplot as plt
 import soundfile as sf
 # Main directory of the dataset (adjust)
-data_dir = 'speech_commands_v0.02/go'
+data_dir = 'speech_commands_v0.02'
 
+"""
+def extract_mfccs(audio_path, sr=16000, n_mfcc=256, n_fft=4096, hop_length=512):
+    audio, _ = librosa.load(audio_path, sr=sr)
+    mfccs = librosa.feature.mfcc(
+        y=audio,
+        sr=sr,
+        n_mfcc=n_mfcc,
+        n_fft=n_fft,
+        hop_length=hop_length,
+    )
+    return mfccs
+"""
 def prepare_dataset_scikit_learn(data_directory , sr=16000, n_mfcc=13):
     X = [ ] # Features (MFCCs)
     y = [ ] # Labels
+
     """
     In this example ten commands are use for the training .
-    As a f i r s t step we recommend to start with a binary classification . For this remove
+    As a first step we recommend to start with a binary classification . For this remove
     the
-    loop or reduce the l i s t of allowed words.
+    loop or reduce the list of allowed words.
     """
+    
     allowed_words = ['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go']
 
     # You can also add _background_noise_ and _unknown_
+    print (f"processing dataset in {data_directory} ...")
     for root , _, files in os.walk(data_directory):
-        
+        print (f"Processing directory : {root} with {len(files)} files")
         for file in files:
             if file.endswith('.wav'):
                 label = os.path.basename(root)
@@ -100,9 +115,10 @@ def prepare_dataset_scikit_learn(data_directory , sr=16000, n_mfcc=13):
 
     return X_train, X_val, X_test, y_train , y_val, y_test , label_encoder
 
-print ("Prepare data for scikit-learn... ")
-X_train_sk, X_val_sk, X_test_sk, y_train_sk, y_val_sk, y_test_sk, label_encoder_sk = prepare_dataset_scikit_learn(data_dir)
-print ( f"Training data Shape ( scikit - learn ) : {X_train_sk. shape} , Labels :{y_train_sk.shape}")
-print ( f"Validation data Shape ( scikit - learn ) : {X_val_sk. shape} , Labels : {y_val_sk. shape}")
-print ( f"Test Data Shape ( scikit - learn ) : {X_test_sk. shape} , Labels : {y_test_sk . shape}")
-print ( f"Classes : {label_encoder_sk . classes_}")
+if __name__ == "__main__":
+    print ("Prepare data for scikit-learn... ")
+    X_train_sk, X_val_sk, X_test_sk, y_train_sk, y_val_sk, y_test_sk, label_encoder_sk = prepare_dataset_scikit_learn(data_dir)
+    print ( f"Training data Shape ( scikit - learn ) : {X_train_sk. shape} , Labels :{y_train_sk.shape}")
+    print ( f"Validation data Shape ( scikit - learn ) : {X_val_sk. shape} , Labels : {y_val_sk. shape}")
+    print ( f"Test Data Shape ( scikit - learn ) : {X_test_sk. shape} , Labels : {y_test_sk . shape}")
+    print ( f"Classes : {label_encoder_sk . classes_}")
