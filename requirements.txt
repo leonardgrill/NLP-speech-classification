@@ -5,3 +5,4 @@ pandas
 librosa
 soundfile
 scikit-learn
+ipython
